@@ -24,17 +24,23 @@ float f1=0, f2=0.023, f3=0.839;
 
 void init(void)
 {
-GLfloat mat_specular[] = { 0.7,0.7, 0.7,0.7};
-   GLfloat mat_shininess[] = { 20.0 };
-   GLfloat light_position[] = { 0.0, 5.0, 1.0, 0.0 };
+GLfloat mat_specular[] = { 1,1,1,1};
+   GLfloat mate[] = { 0,0,0,1 };
+   GLfloat light_position[] = { 0, 10.0, 10.0, 0.0 };
+   GLfloat acolor[] = { 0,0,0,1 };
+   GLfloat dcolor[] = { 1,1,1,1 };
+   GLfloat scolor[] = { 1,1,1,1 };
    glClearColor (0.0, 0.0, 0.0, 0.0);
    glShadeModel (GL_SMOOTH);
 
    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_specular);
-   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+   glMaterialfv(GL_FRONT, GL_EMISSION,mate);
    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+   glLightfv(GL_LIGHT0, GL_AMBIENT, acolor);
+   glLightfv(GL_LIGHT0, GL_DIFFUSE, dcolor);
+   glLightfv(GL_LIGHT0, GL_SPECULAR, scolor);
     glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
    glEnable(GL_DEPTH_TEST);
@@ -113,8 +119,9 @@ void keys(unsigned char key,int x,int y ){
                  break;
     case 1: glutDisplayFunc(intro2);
                  break;
-    case 2: glutDisplayFunc(display);
-                glutTimerFunc(0,timer,0);
+    case 2:PlaySound(TEXT("India.wav"),NULL,SND_ASYNC);
+                glutDisplayFunc(display2);
+                glutTimerFunc(0,timer2,0);
                 break;
     default:exit(0);
     }
@@ -285,9 +292,9 @@ void audience(float a1,float a2,float a3,int x){
 
 void audience2(){
     glPushMatrix();
-    audience(0.5,0.5,0,audhand);
+    audience(1,0,0,audhand);
     glTranslatef(-1.5,0,0);
-    audience(0,0.5,0.5,-audhand);
+    audience(0,0,1,-audhand);
     glPopMatrix();
 }
 
@@ -696,7 +703,7 @@ void display(){
             glTranslatef(-0.2,0.6,-0.7);
             glRotatef(20,0,0,-1);
             glRotatef(70,1,0,0);
-            glScalef(0.3,1.3,0.1);
+            glScalef(0.2,1.3,0.1);
             glColor3f(0.721, 0.643, 0.537);
             glutSolidCube(1);
             glEnd();
@@ -712,7 +719,7 @@ void display(){
             glTranslatef(-0.4,0.3,0.7);
             glRotatef(20,0,0,-1);
             glRotatef(-50,1,0,0);
-            glScalef(0.3,1.3,0.1);
+            glScalef(0.2,1.3,0.1);
             glColor3f(0.721, 0.643, 0.537);
             glutSolidCube(1);
             glEnd();
@@ -768,17 +775,18 @@ glViewport(0,0,w,h);
 
 int c=0,df=0;
 void timer(int){
+     /*
      if(df==1&&arm<=60){
         y=0,z=0,arm=0,df=0,dist=40;
 
         glutPostRedisplay();
     }
     else{
-
+    */
     glutPostRedisplay();
     glutTimerFunc(1000/60,timer,0);
     c+=1;
-    if(c%7==0)
+    if(c%15==0)
     audhand*=-1;
     z-=0.3;
  if(z>-9.5){
@@ -799,5 +807,445 @@ void timer(int){
             arm-=4;
 
     }
+ //   }
+
+
+void display2(){
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    init();
+    glScalef(1,1.5,1);
+    glTranslatef(0.0,0.0,-8.0);
+    glPushMatrix();                                     //sky
+        glColor3f(0.439, 0.772, 0.984);
+        glTranslatef(0,0,-50);
+        glBegin(GL_QUADS);
+            glVertex3f(-50,50,0);
+            glVertex3f(50,50,0);
+            glVertex3f(50,-50,0);
+            glVertex3f(-50,-50,0);
+        glEnd();
+    glPopMatrix();
+    glPushMatrix();                                     //stands
+        glColor3f(0.4,0.4,0.4);
+        glTranslatef(0,0,-49);
+        glBegin(GL_QUADS);
+            glVertex3f(-50,7,0);
+            glVertex3f(50,7,0);
+            glVertex3f(50,-50,0);
+            glVertex3f(-50,-50,0);
+        glEnd();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-5,0,-10);
+    audiencerow(1,0);
+    audiencerow(2,-1);
+    audiencerow(3,-2);
+    audiencerow(4,-3);
+    audiencerow(5,-3.3);
+    audiencerow(6,-4);
+    glPopMatrix();
+    glTranslatef(2,-1,-dist-5);
+    glPushMatrix();                                     //grass
+        glColor3f(0.333, 0.486, 0.333);
+        glBegin(GL_POLYGON);
+        glVertex3f(-50,-1,-50);
+        glVertex3f(50,-1,-50);
+        glVertex3f(50,-1,50);
+        glVertex3f(-50,-1,50);
+        glEnd();
+    glPopMatrix();
+    glPushMatrix();                                     //pitch
+        glColor3f(0.945, 0.878, 0.674);
+        glBegin(GL_POLYGON);
+        glVertex3f(-2,-0.9,-2);
+        glVertex3f(2,-0.9,-2);
+        glVertex3f(2,-0.9,10);
+        glVertex3f(-2,-0.9,10);
+        glEnd();
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f(0, 0.439, 0.921);
+        glTranslatef(1,0,9);
+        playerframe(0, 0.439, 0.921);
+        playerrotate(0, 0.439, 0.921,0);
+        glPushMatrix();             //BATSMAN bat
+            glTranslatef(-0.4,0.3,0.7);
+            glRotatef(20,0,0,-1);
+            glRotatef(-50,1,0,0);
+            glScalef(0.2,1.3,0.1);
+            glColor3f(0.721, 0.643, 0.537);
+            glutSolidCube(1);
+            glEnd();
+        glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();                                     //wickets bowling
+        glColor3f(1,1,1);
+        glTranslatef(0,0,9.5);
+        glScalef(0.08,1.3,0.1);
+        glTranslatef(0,-0.2,0);
+        glutSolidCube(1.0);
+        glTranslatef(2,0,0);
+        glutSolidCube(1.0);
+        glTranslatef(-4,0,0);
+        glutSolidCube(1.0);
+        glEnd();
+    glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.2,0.6,10);
+        glRotatef(90,1,0,0);
+        glColor3f(0,0,0);           //UMPIRE leg1
+        glScalef(1.5,1,1);
+        gluCylinder(p, 0.1,0.1,3, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0.2,0.6,10);
+        glRotatef(90,1,0,0);
+        glColor3f(0,0,0);           //UMPIRE leg2
+        glScalef(1.5,1,1);
+        gluCylinder(p, 0.1,0.1,3, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0,1.6,10);
+        glRotatef(90,1,0,0);
+        glColor3f(1,0,0);           //UMPIRE chest
+        glScalef(1.5,1,1);
+        gluCylinder(p, 0.2,0.2,1, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0,1.8,10);
+        glColor3f(1,0.7,0.7);           //UMPIRE head
+        glScalef(1,1.5,1);
+        glutSolidSphere(0.2,10,10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0,1.95,10);
+        glRotatef(90,0,0,1);
+        glRotatef(90,0,1,0);
+        glColor3f(0,0,0);           //UMPIRE hat
+        gluCylinder(p, 0.2,0.2,0.3, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0,1.95,10);
+        glRotatef(90,0,0,1);
+        glRotatef(90,0,1,0);
+        glColor3f(0,0,0);           //UMPIRE hat base
+        gluCylinder(p, 0.3,0.3,0.05, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-0.4,1.6,10);
+        glRotatef(90,1,0,0);
+        glRotatef(-10,0,1,0);
+        glColor3f(1,0,0);           //UMPIRE hand1
+        glScalef(1.2,1,1);
+        gluCylinder(p, 0.1,0.1,1, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0.4,1.6,10);
+        glRotatef(90,1,0,0);
+        glRotatef(10,0,1,0);
+        glColor3f(1,0,0);           //UMPIRE hand2
+        glScalef(1.2,1,1);
+        gluCylinder(p, 0.1,0.1,1, 10, 10);
+        glEnd();
+    glPopMatrix();
+        glPushMatrix();
+        glTranslatef(0.6,0.5,10);
+        glColor3f(1,0.7,0.7);           //UMPIRE fist
+        glutSolidSphere(0.12,10,10);
+        glEnd();
+    glPopMatrix();
+     glPushMatrix();
+        glTranslatef(-0.6,0.5,10);
+        glColor3f(1,0.7,0.7);           //UMPIRE fist
+        glutSolidSphere(0.12,10,10);
+        glEnd();
+    glPopMatrix();
+    glColor3f(f1,f2,f3);
+    fielder(0,0,-5,90,0,1,0);
+    fielder(-4,0,-4,120,0,1,0);
+    fielder(-4,0,35,270,0,1,0);
+    fielder(-30,0,10,180,0,1,0);
+    fielder(9,0,30,-70,0,1,0);
+    fielder(-20,0,30,240,0,1,0);
+    fielder(30,0,20,0,0,1,0);
+    fielder(9,0,-20,70,0,1,0);
+    fielder(35,0,-5,30,0,1,0);
+    fielder(-10,0,-20,120,0,1,0);
+
+    glPushMatrix();           //BAtSMAN MAIN
+        glColor3f(0, 0.439, 0.921);
+        playerframe(0, 0.439, 0.921);
+        glTranslatef(0.2,1.5,.1);
+        glRotatef(arm,-0.5, 1.0, 0);
+        glTranslatef(-0.2,-1.5,-0.1);
+        playerrotate(0, 0.439, 0.921,0);
+        glPushMatrix();             //BATSMAN bat
+            glTranslatef(-0.2,0.6,-0.7);
+            glRotatef(20,0,0,-1);
+            glRotatef(70,1,0,0);
+            glScalef(0.2,1.3,0.1);
+            glColor3f(0.721, 0.643, 0.537);
+            glutSolidCube(1);
+            glEnd();
+        glPopMatrix();
+
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f(0, 0.439, 0.921);
+        glTranslatef(1,0,9);
+        playerframe(0, 0.439, 0.921);
+        playerrotate(0, 0.439, 0.921,0);
+        glPushMatrix();             //BATSMAN bat
+            glTranslatef(-0.4,0.3,0.7);
+            glRotatef(20,0,0,-1);
+            glRotatef(-50,1,0,0);
+            glScalef(0.2,1.3,0.1);
+            glColor3f(0.721, 0.643, 0.537);
+            glutSolidCube(1);
+            glEnd();
+        glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();                                     //wickets batting
+        glColor3f(1,1,1);
+        glScalef(0.08,1.3,0.1);
+        glTranslatef(0,-0.2,-15);
+        glutSolidCube(1.0);
+        glTranslatef(2,0,0);
+        glutSolidCube(1.0);
+        glTranslatef(-4,0,0);
+        glutSolidCube(1.0);
+        glEnd();
+    glPopMatrix();
+    glTranslatef(-1,0,dist);
+    if(jump>0)
+        glTranslatef(0,jump,0);
+    glRotatef(-90,0,1,0);
+    glPushMatrix();
+    glTranslatef(0.1,0,0);
+    glRotatef(10,0,0,1);
+    glPushMatrix();
+    //glTranslatef(0,0,-0.2);
+    glTranslatef(0,0.5,0);
+    glRotatef(barm,0,0,1);
+    glTranslatef(0,-0.5,0);
+    glColor3f(f1,f2,f3);
+        glPushMatrix();             //BATSMAN left thigh
+            glTranslatef(0.3,0.5,0.2);
+            glRotatef(90, 1.0, 0.0, -0.3);
+            gluCylinder(p, 0.18,0.15,0.7, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN leg1
+            glTranslatef(0.1,0.05,0.25);
+            glRotatef(90, 1.0, 0.0, 0.3);
+            gluCylinder(p, 0.15,0.1,0.9, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN foot1
+            glTranslatef(0.15,-0.8,0.3);
+            glScalef(2.3,1.2,1);
+            glColor3f(1,1,1);
+            glutSolidSphere(0.1,10,3);
+            glEnd();
+        glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0,0.5,0);
+        glRotatef(-barm,0,0,1);
+        glTranslatef(0,-0.5,0);
+        glColor3f(f1,f2,f3);
+        glPushMatrix();             //BATSMAN THIGH2
+            glTranslatef(0.3,0.5,-0.1);
+            glRotatef(90, 1.0, 0.0, -0.5);
+            glRotatef(30, 1.0, 0.0, 0);
+            gluCylinder(p, 0.18,0.15,0.7, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN leg2
+            glTranslatef(-0.1,0.05,-0.3);
+            glRotatef(90, 1.0, 0.0, 0.3);
+            gluCylinder(p, 0.15,0.1,0.9, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN foot2
+            glTranslatef(0.05,-0.8,-0.2);
+            glScalef(2.3,1.2,1);
+            glColor3f(1,1,1);
+            glutSolidSphere(0.1,10,3);
+            glEnd();
+        glPopMatrix();
+        glPopMatrix();
+    glPopMatrix();
+        glTranslatef(0,-0.2,0);
+        glColor3f(f1,f2,f3);
+        glPushMatrix();             //BATSMAN butt
+            glRotatef(90,0,1,0);
+            glRotatef(90,1,0,0);
+            glScalef(1.6,1,1);
+            glTranslatef(0,0.3,-0.7);
+            gluCylinder(p, 0.23,0.2,0.3, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glTranslatef(0.3,-0.1,0);
+        glRotatef(20, 0.0, 0.0, 1.0);
+        glPushMatrix();             //BATSMAN chest
+            glRotatef(90,0,1,0);
+            glRotatef(90,1,0,0);
+            glScalef(1.7,1,1);
+            glTranslatef(0,0.3,-1.5);
+            gluCylinder(p, 0.26,0.2,0.8, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN head
+            glTranslatef(0.3,1.8,0);
+            glScalef(0.5,0.7,0.5);
+            glColor3f(1,0.7,0.7);
+            glutSolidSphere(0.35,10,10);
+            glEnd();
+        glPopMatrix();
+                glPushMatrix();             //BATSMAN eyes
+            glTranslatef(0.15,1.8,0.1);
+            glColor3f(0,0,0);
+            glutSolidSphere(0.02,10,10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN eyes
+            glTranslatef(0.15,1.8,-0.1);
+            glColor3f(0,0,0);
+            glutSolidSphere(0.02,10,10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN hair
+            glRotatef(90,0,1,0);
+            glRotatef(90,1,0,0);
+            glTranslatef(0,0.3,-1.95);
+            glColor3f(0,0,0);
+            //gluCylinder(p, 0.18,0.17,0.11, 10, 10);
+            glScalef(1,1,0.6);
+            glutSolidSphere(0.2,10,10);
+            glEnd();
+        glPopMatrix();glPushMatrix();             //BATSMAN hair
+            glRotatef(90,0,1,0);
+            glTranslatef(0,1.8,0.4);
+            glColor3f(0,0,0);
+            //gluCylinder(p, 0.18,0.17,0.11, 10, 10);
+            glScalef(1,1,0.6);
+            glutSolidSphere(0.2,10,10);
+            glEnd();
+        glPopMatrix();
+
+        glColor3f(f1,f2,f3);
+        glPushMatrix();             //BATSMAN shoulderchest
+            glTranslatef(0.3,1.38,0);
+            glScalef(0.7,0.7,1.3);
+            glutSolidSphere(0.35,10,10);
+            glEnd();
+        glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.1,1.3,-0.2);
+        dist>26?glRotatef(0.6*barm,0,0,1):glRotatef(actarm,0,0,1);
+        glTranslatef(-0.1,-1.3,0.2);
+        glPushMatrix();             //BATSMAN arm2
+            glTranslatef(0.3,1.4,-0.35);
+            glRotatef(90, 1.0, 0.0,0);
+            glRotatef(40, 1, -0.5,0);
+            gluCylinder(p, 0.15,0.1,0.5, 10, 10);
+            glEnd();
+        glPopMatrix();
+            glColor3f(1,0.7,0.7);
+        glPushMatrix();             //BATSMAN forearm2
+            glTranslatef(0.2,1.1,-0.6);
+            glRotatef(90, 1.0, 0.0,0);
+            glRotatef(-90, 0, 1,0);
+            glColor3f(1,0.7,0.7);
+            gluCylinder(p, 0.12,0.1,0.6, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN hand2
+            glTranslatef(-0.5,1.1,-0.6);
+            glutSolidSphere(0.13,10,10);
+            glEnd();
+        glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f(f1,f2,f3);
+        glTranslatef(0.1,1.3,-0.2);
+        glRotatef(-0.6*barm,0,0,1);
+        glTranslatef(-0.1,-1.3,0.2);
+        glPushMatrix();             //BATSMAN arm1
+            glTranslatef(0.3,1.4,0.3);
+            glRotatef(90, 1.0, 0.0,0);
+            glRotatef(40, -1,-1,0);
+            gluCylinder(p, 0.15,0.1,0.5, 10, 10);
+            glEnd();
+        glPopMatrix();
+            glColor3f(1,0.7,0.7);
+        glPushMatrix();             //BATSMAN forearm1
+            glTranslatef(0.1,1.1,0.5);
+            glRotatef(90, 1.0, 0.0,0);
+            glRotatef(-90, 0, 1,0);
+            glColor3f(1,0.7,0.7);
+            gluCylinder(p, 0.12,0.1,0.6, 10, 10);
+            glEnd();
+        glPopMatrix();
+        glPushMatrix();             //BATSMAN hand1
+            glTranslatef(-0.5,1.1,0.5);
+            glutSolidSphere(0.13,10,10);
+            glEnd();
+        glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glutSwapBuffers();
+}
+int dir=1;
+void timer2(int){
+    c+=1;
+    //if(dist<20&&dist>19.7)
+         //PlaySound(TEXT("C:\\Users\\kalla\\Documents\\CB\\CGProj\\Dhoni.wav"),NULL,SND_ASYNC);
+    if(dist<10){
+         //PlaySound(TEXT("C:\\Users\\kalla\\Documents\\CB\\CGProj\\Dhoni.wav"),NULL,SND_ASYNC);
+        glutDisplayFunc(display);
+        glutTimerFunc(0,timer,0);
+    }
+    else{
+
+    glutPostRedisplay();
+    glutTimerFunc(1000/60,timer2,0);
+    if(dist>10)
+        dist-=0.2;
+    if(dist==26)
+        actarm=barm;
+    if(dist<26&&dist>20){
+        jump+=0.03;
+        actarm-=3;
+    }
+    if(dist<20&&dist>10){
+        jump-=0.02;
+        actarm+=5.5;
     }
 
+    //if(c%7==0)
+    //audhand*=-1;
+    if(dist>10)
+      switch(dir){
+        case 1: if(barm<50)
+                        barm+=3;
+                    else  dir=-1;
+        break;
+        case -1:
+            if(barm>-50)
+                        barm-=3;
+                    else dir=1;
+        break;
+}
+    }
+}
