@@ -895,3 +895,35 @@
 
 1526093414 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_print_pop.h
 
+1653630623 source:c:\users\anuro\documents\cb\cricketdemo\main.cpp
+	<GL/glut.h>
+	<windows.h>
+	<mmsystem.h>
+	<stdio.h>
+	<string.h>
+	"letters.h"
+
+1653623147 c:\users\anuro\documents\cb\cricketdemo\textures.h
+	<windows.h>
+	<stdio.h>
+	<GL\gl.h>
+	<GL\glu.h>
+	<GL\glut.h>
+
+1653625190 c:\users\anuro\documents\cb\cricketdemo\letters.h
+
+1653669883 source:c:\users\anuro\documents\cb\cricketdemo - copy\main.cpp
+	<GL/glut.h>
+	<windows.h>
+	<mmsystem.h>
+	<stdio.h>
+	<string.h>
+	"texture.h"
+
+1653668316 c:\users\anuro\documents\cb\cricketdemo - copy\texture.h
+	<windows.h>
+	<stdio.h>
+	<GL\gl.h>
+	<GL\glu.h>
+	<GL\glut.h>
+
